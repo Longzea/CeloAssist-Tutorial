@@ -439,9 +439,9 @@ git clone https://github.com/Longzea/CeloAssist-Boilerplate
 
 This will create a folder called `CeloAssist-Boilerplate`. The folder contains the neccessary setup files and folders needed to build our front end and connect it with our smart contract. The three main folders you should watch out for is the: 
 - The `abis` folder which contains:
-  - erc20.abi.json file
-  - marketplace.abi.json file
-  - marketplace.sol file
+  - celoassist.abi.json file
+  - celoassist.sol file
+  - irc.abi.json file
 
 The `components` folder which contains the `Header.js` file and the `RequestList.js` file. 
 
