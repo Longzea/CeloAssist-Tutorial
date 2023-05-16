@@ -1,5 +1,23 @@
 # How to Build a Celo Assistance dApp
 
+## Table of Content
+- [Introduction](#introduction)
+  - [What is Celo](#what-is-celo)
+- [Prerequisites](#prerequisites)
+- [Requirements](#requirements)
+- [Developing Our Smart Contract](#developing-our-smart-contract)
+- [Deploying our smart contract](#deploying-our-smart-contract)
+- [Developing the frontend](#developing-the-frontend)
+- [The HTML Part of the dAPP](#the-html-part-of-the-dapp)
+- [The Javascript part of the DApp](#the-javascript-part-of-the-dapp)
+  - [The index.js file](#the-indexjs-file)
+  - [The App.js file](#the-appjs-file)
+  - [The Header.js component](#the-headerjs-component)
+  - [The RequestList.js file](#the-requestlistjs-file)
+- [Conclusion](#conclusion)
+- [Next Steps](#next-steps)
+- [About the Author](#about-the-author)
+
 ## Introduction:
 
 Before we proceed here is a preview and a live demo link of what will be building:
@@ -34,7 +52,7 @@ Celo is a blockchain protocol that aims to address some of the barriers to crypt
 - Celo Extension Wallet. Click **[here](https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh?hl=en)** to download.
 - A Github account.
 
-## Lets us Begin
+ Lets us Begin
 
 ## Developing Our Smart Contract:
 
@@ -145,15 +163,16 @@ The first struct is used to create the details of a payee, and those details con
   ```solidity
     // Function to create a payee.
     function createPayee(string memory _payeeFullName, string memory _payeeDescription, string memory _networkType, uint _payeeGasFee   ) public {
-          require(bytes(_payeeFullName).length > 0, "field cannot be empty"); 
-    require(bytes(_payeeDescription).length > 0, "field cannot be empty");
-    require(_payeeGasFee > 0, "fee be greater than 0");
+        require(bytes(_payeeFullName).length > 0, "field cannot be empty"); 
+        require(bytes(_payeeDescription).length > 0, "field cannot be empty");
+        require(_payeeGasFee > 0, "fee be greater than 0");
        
         payee[payeeLength] = PayeeDetails({owner : payable(msg.sender), payeeFullName : _payeeFullName,
         payeeDescription : _payeeDescription, networkType : _networkType,
         payeeGasFee :  _payeeGasFee   });
         payeeLength++;
-}
+        emit PayeeCreated(payeeLength, msg.sender, _payeeFullName, _payeeDescription, _networkType, _payeeGasFee);
+    }
   ```
 
 The function above takes four parameters with their datatypes, then it uses the `require` method to ensure that those parameters should not be empty when a user fills out the form which we are going to create on the front end.
@@ -164,7 +183,8 @@ Up next, we are going to create a function called `fetchPayeeById`. This functio
 
 
 ```solidity
-function fetchPayeeById(uint _id) public view returns (
+// Function to get a payee details through its id.
+    function fetchPayeeById(uint _id) public view returns (
         address,
         string memory,
         string memory,
@@ -189,8 +209,7 @@ The function returns the  `owner`, `payeeFullName`,  `payeeDescription`, `networ
 Up next, we are going to create a function that can delete a payee request through it's id.
 
 ```solidity
- // function for a payee to delete his / her request 
-    function deletePayeeRequest(uint id) public {
+ function deletePayeeRequest(uint id) public {
         require(msg.sender == payee[id].owner, "Please ensure you are the owner this request");
          
          // Shift remaining payees down in the mapping
@@ -201,6 +220,9 @@ Up next, we are going to create a function that can delete a payee request throu
         // Delete the last element in the mapping
         delete payee[payeeLength - 1];
         payeeLength--;
+
+        emit PayeeRequestDeleted(id, msg.sender);
+
     }
 ```
 
@@ -215,7 +237,7 @@ Up next, we are going to create a function called `fundPayee` which will be used
 
 ```solidity
    // function to fund a payee 
-        function fundPayee(uint _index) public payable  {
+    function fundPayee(uint _index) public payable  {
         require(
            IERC20Token(cUsdTokenAddress).transferFrom(
             msg.sender,
@@ -224,7 +246,7 @@ Up next, we are going to create a function called `fundPayee` which will be used
           ),
           "Transfer failed."
         );
-        
+        emit PayeeFunded(_index, msg.sender, payee[_index].payeeGasFee);
     }
 ```
 
@@ -252,9 +274,11 @@ Up next, we are going to create a function called `getChatById`. This function w
 
 
 ```solidity
-//function to get chats associate with a payee by id
-    function getChatsById(uint256 id) public view returns (Chat[] memory) {
-        return chats[id];
+// Function to store chat messages
+    function storeChatMessages(uint256 id, string memory _message) public {
+         chats[id].push(Chat({owner : msg.sender, message : _message }));
+         emit ChatMessageStored(id, msg.sender, _message);
+    
     }
 ```
 
@@ -278,7 +302,6 @@ Here is the full code:
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
-import "@openzeppelin/contracts/utils/Strings.sol";
 
 interface IERC20Token {
   function transfer(address, uint256) external returns (bool);
@@ -316,6 +339,37 @@ contract CeloAssist{
         string  message;
     }
 
+    // Event emitted when a payee is created.
+    event PayeeCreated(
+        uint indexed payeeId,
+        address indexed owner,
+        string payeeFullName,
+        string payeeDescription,
+        string networkType,
+        uint payeeGasFee
+    );
+
+    // Event emitted when a payee request is deleted.
+    event PayeeRequestDeleted(
+        uint indexed payeeId,
+        address indexed owner
+    );
+
+    // Event emitted when a payee is funded.
+    event PayeeFunded(
+        uint indexed payeeId,
+        address indexed funder,
+        uint amount
+    );
+
+    // Event emitted when a chat message is stored.
+    event ChatMessageStored(
+        uint indexed payeeId,
+        address indexed sender,
+        string message
+    );
+
+
     // mapping to store payee details
     mapping (uint => PayeeDetails) internal payee;
 
@@ -325,15 +379,16 @@ contract CeloAssist{
 
     // Function to create a payee.
     function createPayee(string memory _payeeFullName, string memory _payeeDescription, string memory _networkType, uint _payeeGasFee   ) public {
-          require(bytes(_payeeFullName).length > 0, "field cannot be empty"); 
-    require(bytes(_payeeDescription).length > 0, "field cannot be empty");
-    require(_payeeGasFee > 0, "fee be greater than 0");
+        require(bytes(_payeeFullName).length > 0, "field cannot be empty"); 
+        require(bytes(_payeeDescription).length > 0, "field cannot be empty");
+        require(_payeeGasFee > 0, "fee be greater than 0");
        
         payee[payeeLength] = PayeeDetails({owner : payable(msg.sender), payeeFullName : _payeeFullName,
         payeeDescription : _payeeDescription, networkType : _networkType,
         payeeGasFee :  _payeeGasFee   });
         payeeLength++;
-}
+        emit PayeeCreated(payeeLength, msg.sender, _payeeFullName, _payeeDescription, _networkType, _payeeGasFee);
+    }
 
 
     // Function to get a payee details through its id.
@@ -366,10 +421,13 @@ contract CeloAssist{
         // Delete the last element in the mapping
         delete payee[payeeLength - 1];
         payeeLength--;
+
+        emit PayeeRequestDeleted(id, msg.sender);
+
     }
 
-        // function to fund a payee 
-        function fundPayee(uint _index) public payable  {
+    // function to fund a payee 
+    function fundPayee(uint _index) public payable  {
         require(
            IERC20Token(cUsdTokenAddress).transferFrom(
             msg.sender,
@@ -378,13 +436,14 @@ contract CeloAssist{
           ),
           "Transfer failed."
         );
-        
+        emit PayeeFunded(_index, msg.sender, payee[_index].payeeGasFee);
     }
 
 
     // Function to store chat messages
     function storeChatMessages(uint256 id, string memory _message) public {
          chats[id].push(Chat({owner : msg.sender, message : _message }));
+         emit ChatMessageStored(id, msg.sender, _message);
     
     }
 
