@@ -1,4 +1,25 @@
-# How to Build a Celo Assistance dApp
+# Building a Celo Assistance DApp:
+
+## Table of Contents:
+
+- [Building a Celo Assistance DApp](#building-a-celo-assistance-dapp)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+  - [What is Celo?](#what-is-celo)
+- [Pre-requisites](#prerequisites)
+- [Requirements](#requirements)
+- [Developing our Smart Contract](#developing-our-smart-contract)
+- [Deploying our Smart Contract](#deploying-our-smart-contract)
+- [Developing the Frontend](#developing-the-frontend)
+- [The HTML Part of the DAPP](#the-html-part-of-the-dapp)
+- [The Javascript part of the DApp](#the-javascript-part-of-the-dapp)
+  - [The index.js file](#the-indexjs-file)
+  - [The App.js file](#the-appjs-file)
+  - [The Header.js component](#the-headerjs-component)
+  - [The RequestList.js file](#the-requestlistjs-file)
+- [Conclusion](#conclusion)
+- [Next Steps](#next-steps)
+- [About the Author](#about-the-author)
 
 ## Introduction:
 
@@ -13,44 +34,46 @@ Below is a preview of what we are going to build.
 
 ### What is Celo?
 
-Celo is a blockchain protocol that aims to address some of the barriers to cryptoasset adoption (user experience and volatility) by using phone numbers as public keys and issuing a native stable-value token. The network supports the development of smart contracts and decentralized applications.
+[Celo](https://docs.celo.org/learn/celo-highlights) is a blockchain protocol that aims to address some of the barriers to cryptoasset adoption (user experience and volatility) by using phone numbers as public keys and issuing a native stable-value token. The network supports the development of Smart Contracts and decentralized applications.
 
+Celo was launched in 2019 by the Celo Foundation, a non-profit organization based in San Francisco. The platform uses a decentralized Proof-of-Stake (PoS) consensus algorithm to validate transactions and secure the network. Its native cryptocurrency is called Celo Dollar (cUSD), which is a stablecoin pegged to the value of the United States dollar. Celo also has a utility token called Celo Gold (cGLD), used for network governance and staking.
 
-## Prerequisites:
+## Pre-requisites:
 
-- Basic understanding of blockchain concepts. You can click [here](https://dacade.org/communities/blockchain/courses/intro-to-blockchain) to learn.
-- Basic understanding of what a smart contract is.
-- Basic knowledge on Solidity and its concepts. you can click [here](https://dacade.org/communities/ethereum/courses/sol-101/learning-modules/dcc5e8e2-bc22-49a6-ace7-23ec7fcc81d5) to learn
-- Basic knowledge of React.js
-- Basic understanding of how git and github works.
+Basic knowledge & understanding of the following:
+
+1. [Blockchain Technology](https://aws.amazon.com/what-is/blockchain/?aws-products-all.sort-by=item.additionalFields.productNameLowercase&aws-products-all.sort-order=asc)
+2. [Smart Contract](https://docs.celo.org/community/release-process/smart-contracts) 
+3. [Solidity](https://docs.soliditylang.org/en/v0.8.20/) and its concepts
+4. [React.js](https://react-cn.github.io/react/downloads.html)
+5. Working of [Git](https://github.com/git-guides/install-git) and [Github](https://desktop.github.com/)
 
 ## Requirements: 
 
-- Access to a computer with an internet connection and a chrome web browser.
-- **[NodeJS](https://nodejs.org/en/download)** from V12.or higher
-- A code editor or text editor. **[VSCode](https://code.visualstudio.com/download)** is recommended
-- A terminal. **[Git Bash](https://git-scm.com/downloads)** is recommended
-- Remix IDE. Click **[here](https://remix.ethereum.org)** for the web version.
-- Celo Extension Wallet. Click **[here](https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh?hl=en)** to download.
-- A Github account.
+1. Access to a Computer with an Internet connection and a Chrome web browser.
+2. [NodeJS](https://nodejs.org/en/download)(V12.or higher)
+3. [VSCode](https://code.visualstudio.com/download): A code editor or text editor.
+4. [Git Bash](https://git-scm.com/downloads) 
+5. [Remix IDE](https://remix.ethereum.org)
+6. [Celo Extension Wallet](https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh?hl=en)
+7. A [Github](https://desktop.github.com/) account.
 
-## Lets us Begin
+## Lets us Begin!!:
 
 ## Developing Our Smart Contract:
 
-In developing our smart contract we are going to use Remix which is a web-based IDE for writing smart contracts in Solidity.
+In developing our Smart Contract we are going to use [Remix IDE](https://remix.ethereum.org) which is a web-based IDE for writing Smart Contracts in Solidity.
 
-To get started, open the Remix IDE by clicking on the link https://remix.ethereum.org/ you will see a contract folder. Inside that contract folder, create a Solidity file called `CeloAssist.sol`. The `.sol` extension indicates that it is a Solidity file. 
+To get started, open the [Remix IDE](https://remix.ethereum.org) you will see a contract folder. Inside that contract folder, create a Solidity file called `CeloAssist.sol`. The `.sol` extension indicates that it is a Solidity file. 
 
 Next inside the file, let's create a license identifier that helps in governing our code and it should be used to avoid any legal issues.
-
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 ```
 
-In the above code, we use `MIT` as our license identifier, and the pragma keyword is used to specify the Solidity version that we want the compiler to use. In this case, it should be higher than or equal to seven and lower than nine. 
+In the above code, we use `MIT` as our license identifier, and the `pragma` keyword is used to specify the Solidity version that we want the compiler to use. In this case, it should be higher than or equal to seven and lower than nine. 
 
 Up next, we are going to define an `IERC20Token` interface which enables us to interact with the Celo USD stablecoin (cUSD). 
 
@@ -68,12 +91,11 @@ interface IERC20Token {
 }
 ```
 
-Most tokens are ancestors of the very popular ERC-20 token and follow its standard interface. It provides you with very practical basic functionality that you don’t have to implement yourself
+Most tokens are ancestors of the very popular ERC-20 token and follow its standard interface. It provides you with very practical basic functionality that you don’t have to implement by yourself.
 
-You create an interface using the interface keyword, followed by a name. You can choose IERC20Token or another name, and the functionality of the interface. In this case, the functionality of the ERC-20 token.
+Create an interface using the interface keyword, followed by a name. You can choose `IERC20Token` or another name and the functionality of the interface. In this case, the functionality of the ERC-20 token.
 
 Next, let's define our contract by using the `contract` keyword followed by the name of the contract and then an open and close curly braces. Inside the curly braces is where we will be declaring our variables and function.
-
 
 ```solidity
 contract CeloAssist{
@@ -84,7 +106,7 @@ contract CeloAssist{
 
 In the above code, we create our contract with the name `CeloAssist`, followed by two variables `payeeLength` and `cUsdTokenAddress`. The `payeeLength` keeps track of the number of users that has create a request while the `cUsdTokenAddress` store the `address` of the cUSD `ERC-20` token in order to interact with it.
 
-Next,  we are going to create a constructor for the cUSD address incase the address changes in the future we won't find it difficult to change it.
+Next,  we are going to create a `constructor` for the cUSD address incase the address changes in the future we won't find it difficult to change it.
 
 ```solidity
 // Creating a constructor for the cUSD address
@@ -114,18 +136,18 @@ In next we are going to create two `structs`. Structs are a collection of variab
 
 ``` 
 
-The first struct is used to create the details of a payee, and those details consist of:
+The first `struct` is used to create the details of a payee and those details consist of:
  1. `owner` : this stores the payee's address, which is `payable` and it's datatype is `address`.
  2. `payeeFullName` : this stores the fullname of the payee and it's  datatype is `string`. 
  3. `payeeDescription` : this stores the payee's description on what he / she wants and it's of datatype `string`
  4. `networkType` : this stores the network type in which the amount should be paid in and it's of datatype `string`
  5. `payeeGasFee` : this stores the amount requested by the user and it's to datatype `uint`.
 
- The second struct is used to create the chat details and it consist of 
+ The second `struct` is used to create the chat details and it consist of 
   1. `owner` : this stores the address of the sender  and it's datatype is `address`.
   2. `message` : this stores the chat message and it's datatype is `string`.
 
-  Up next, we are going to create two `mappings` to store store payee request and also store chats associated with a payee. A `mapping` is like a collection of key types and corresponding value type pairs. You can learn more about `mapping` ([here](https://remix.ethereum.org/?#activate=solidityUnitTesting,solidity,LearnEth&call=LearnEth//startTutorial//ethereum/remix-workshops//master//soliditybeginner&lang=en&optimize=false&runs=200&evmVersion=null&version=soljson-v0.8.18+commit.87f61d96.js))
+Up next, we are going to create two `mappings` to store store payee request and also store chats associated with a payee. A `mapping` is like a collection of key types and corresponding value type pairs. You can learn more about `mapping` ([here](https://remix.ethereum.org/?#activate=solidityUnitTesting,solidity,LearnEth&call=LearnEth//startTutorial//ethereum/remix-workshops//master//soliditybeginner&lang=en&optimize=false&runs=200&evmVersion=null&version=soljson-v0.8.18+commit.87f61d96.js))
 
   ```solidity
     // mapping to store payee details
@@ -138,7 +160,6 @@ The first struct is used to create the details of a payee, and those details con
   The first `mapping` keeps track of payee's requests and has it's visibility set to `internal` since we only need it inside the function.
 
   While the second `mapping` also has it's visibility set to `internal` and it stores chat messages that is attached to a payee request.
-
 
   Up next,  we are going to create function called `createPayee` which will be used to create a payee request.
 
@@ -161,7 +182,6 @@ The function above takes four parameters with their datatypes, then it uses the 
 Furthermore, we assign the current payee request to our payee mapping, then we assign the corresponding parameters to the struct value which we created above and then increment the payeeLength by one.
 
 Up next, we are going to create a function called `fetchPayeeById`. This function should be able to return the details of a payee by passing the id of that payee as a parameter.
-
 
 ```solidity
 function fetchPayeeById(uint _id) public view returns (
@@ -206,12 +226,11 @@ Up next, we are going to create a function that can delete a payee request throu
 
 The function above takes one parameter `id` and its visibility is set to `public`. In the function we use the `require` method to ensure that the user deleting the request is also the owner of that request, otherwise, it will throw an error message "Please ensure you are the owner of this request".
 
-NB: When you delete a payee which is a struct,  all its members are set to their default values. This means that the deleted payee is not removed from the mapping, but rather replaced with a default struct.
+Note: When you delete a `payee` which is a struct, all its members are set to their default values. This means that the deleted payee is not removed from the mapping, but rather replaced with a default struct.
 
-To delete the payee completely, we need to shift the remaining payees down in the mapping to fill the gap. This shifts the payees from id+1 to payeeLength-1 down by one position in the mapping and then deletes the last element in the mapping.
+To delete the payee completely, we need to shift the remaining payees down in the mapping to fill the gap. This shifts the payees from `id+1` to `payeeLength-1` down by one position in the mapping and then deletes the last element in the mapping.
 
 Up next, we are going to create a function called `fundPayee` which will be used to fund a payee's request.
-
 
 ```solidity
    // function to fund a payee 
@@ -232,7 +251,7 @@ The function above takes a parameter `_index` which will serve as the id of the 
 
 In the function, the `require` method ensures that the cUSD transaction is successful. It then uses the ERC-20 token interface and the stored address to call the transferFrom method to transfer cUSD.
 
-The first parameter is the address of the sender, accessed using the msg.sender method, the second parameter is the recipient of the transaction, which is the owner of the request at the given index, and the final parameter is the payeeGasFee which can also be the amount the payee needs.
+The first parameter is the address of the sender, accessed using the `msg.sender` method, the second parameter is the recipient of the transaction, which is the owner of the request at the given index, and the final parameter is the `payeeGasFee` which can also be the amount the payee needs.
 
 Up next, we are going to create a function to store chat associated with a payee's request.
 
@@ -247,9 +266,7 @@ Up next, we are going to create a function to store chat associated with a payee
 The function takes two parameters `id` and `_message` and its visibility is set to public. 
 In the function, we assign the parameters to the Chat struct and then push the struct to chats mapping with its id to store the chats. 
 
-
 Up next, we are going to create a function called `getChatById`. This function will help us get all chats associated with a request id.
-
 
 ```solidity
 //function to get chats associate with a payee by id
@@ -262,13 +279,11 @@ In the function above, it takes a parameter `id` and its visibility is set to pu
 
 Up next, we are going to create a function called `getPayeeLength`. This will get the length of all payee's request.
 
-
 ```solidity
 // function to get the number of payee.
     function getPayeeLength() public view returns (uint) {
         return (payeeLength);
     }    
-
 }
 ```  
 The function above returns the length of the payee.
@@ -278,6 +293,7 @@ Here is the full code:
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
+
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 interface IERC20Token {
@@ -291,145 +307,153 @@ interface IERC20Token {
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-contract CeloAssist{
-    // Declaring variables.
+contract CeloAssist {
+    using Strings for uint256;
+
+    // Length of the payee array
     uint internal payeeLength = 0;
+
+    // Address of the cUSD token contract
     address internal cUsdTokenAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
-     
-    // Creating a constructor for the cUSD address
-    constructor(address _cUsdTokenAddress) {
-    cUsdTokenAddress = _cUsdTokenAddress;
-    }
-    
-    // Struct to create payee details.
+
+    // Structure to store payee details
     struct PayeeDetails {
-        address payable  owner;
+        address payable owner;
         string payeeFullName;
         string payeeDescription;
         string networkType;
-        uint payeeGasFee;   
+        uint payeeGasFee;
     }
 
-    // Struct to create chats
-    struct Chat{
+    // Structure to store chat messages
+    struct Chat {
         address owner;
-        string  message;
+        string message;
     }
 
-    // mapping to store payee details
-    mapping (uint => PayeeDetails) internal payee;
+    // Mapping to store payee details by ID
+    mapping(uint => PayeeDetails) internal payee;
 
-    // mapping to store chats
+    // Mapping to store chat messages by payee ID
     mapping(uint => Chat[]) internal chats;
 
+    // Constructor
+    constructor(address _cUsdTokenAddress) {
+        cUsdTokenAddress = _cUsdTokenAddress;
+    }
 
-    // Function to create a payee.
-    function createPayee(string memory _payeeFullName, string memory _payeeDescription, string memory _networkType, uint _payeeGasFee   ) public {
-          require(bytes(_payeeFullName).length > 0, "field cannot be empty"); 
-    require(bytes(_payeeDescription).length > 0, "field cannot be empty");
-    require(_payeeGasFee > 0, "fee be greater than 0");
-       
-        payee[payeeLength] = PayeeDetails({owner : payable(msg.sender), payeeFullName : _payeeFullName,
-        payeeDescription : _payeeDescription, networkType : _networkType,
-        payeeGasFee :  _payeeGasFee   });
+    // Function to create a new payee
+    function createPayee(
+        string memory _payeeFullName,
+        string memory _payeeDescription,
+        string memory _networkType,
+        uint _payeeGasFee
+    ) public {
+        require(bytes(_payeeFullName).length > 0, "Payee full name cannot be empty");
+        require(bytes(_payeeDescription).length > 0, "Payee description cannot be empty");
+        require(_payeeGasFee > 0, "Payee gas fee must be greater than 0");
+
+        // Create a new payee and add it to the payee array
+        payee[payeeLength] = PayeeDetails({
+            owner: payable(msg.sender),
+            payeeFullName: _payeeFullName,
+            payeeDescription: _payeeDescription,
+            networkType: _networkType,
+            payeeGasFee: _payeeGasFee
+        });
         payeeLength++;
-}
+    }
 
-
-    // Function to get a payee details through its id.
+    // Function to fetch payee details by ID
     function fetchPayeeById(uint _id) public view returns (
         address,
         string memory,
         string memory,
         string memory,
         uint
-        
     ) {
+        require(_id < payeeLength, "Invalid payee ID");
+
+        PayeeDetails storage payeeDetails = payee[_id];
         return (
-            payee[_id].owner,
-            payee[_id].payeeFullName, 
-            payee[_id].payeeDescription,
-            payee[_id].networkType,
-            payee[_id].payeeGasFee
+            payeeDetails.owner,
+            payeeDetails.payeeFullName,
+            payeeDetails.payeeDescription,
+            payeeDetails.networkType,
+            payeeDetails.payeeGasFee
         );
     }
 
-    // function for a payee to delete his / her request 
+    // Function to delete a payee request
     function deletePayeeRequest(uint id) public {
-        require(msg.sender == payee[id].owner, "Please ensure you are the owner this request");
-         
-         // Shift remaining payees down in the mapping
+        require(id < payeeLength, "Invalid payee ID");
+        require(msg.sender == payee[id].owner, "Only the payee owner can delete the request");
+
+        // Shift the payee array after deletion
         for (uint i = id; i < payeeLength - 1; i++) {
-            payee[i] = payee[i+1];
+            payee[i] = payee[i + 1];
         }
 
-        // Delete the last element in the mapping
         delete payee[payeeLength - 1];
         payeeLength--;
     }
 
-        // function to fund a payee 
-        function fundPayee(uint _index) public payable  {
-        require(
-           IERC20Token(cUsdTokenAddress).transferFrom(
-            msg.sender,
-            payee[_index].owner,
-            payee[_index].payeeGasFee
-          ),
-          "Transfer failed."
-        );
-        
-    }
+    // Function to fund a payee with cUSD tokens
+    function fundPayee(uint _index) public payable {
+        require(_index < payeeLength, "Invalid payee index");
 
+        PayeeDetails storage payeeDetails = payee[_index];
+        require(
+            IERC20Token(cUsdTokenAddress).transferFrom(
+                msg.sender,
+                payeeDetails.owner,
+                payeeDetails.payeeGasFee
+            ),
+            "Transfer failed."
+        );
+    }
 
     // Function to store chat messages
     function storeChatMessages(uint256 id, string memory _message) public {
-         chats[id].push(Chat({owner : msg.sender, message : _message }));
-    
+        require(id < payeeLength, "Invalid payee ID");
+        require(bytes(_message).length > 0, "Chat message cannot be empty");
+
+        // Add the chat message to the chats array for the specified payee ID
+        chats[id].push(Chat({owner: msg.sender, message: _message }));
     }
 
-    //function to get chats associate with a payee by id
+    // Function to get chat messages by payee ID
     function getChatsById(uint256 id) public view returns (Chat[] memory) {
+        require(id < payeeLength, "Invalid payee ID");
+
         return chats[id];
     }
 
-
-    // function to get the number of payee.
+    // Function to get the length of the payee array
     function getPayeeLength() public view returns (uint) {
-        return (payeeLength);
-    }    
-
+        return payeeLength;
+    }
 }
+
 ```
-## Deploying our smart contract:
+## Deploying our Smart Contract:
 
-To deploy the smart contract, we would need to take the following steps:
+To deploy the Smart Contract, we would need to take the following steps:
 
-1. Compile the code
-
+1. Compile the code.
 2. Install the [CeloExtensionWallet](https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh?hl=en) from the Google Chrome store.
-
-
 3. Create a wallet and ensure you store your key phrase in a very safe place when creating your wallet to avoid permanently losing your funds. 
-
-
 4. Get the Celo token for the Alfajores testnet [here](https://celo.org/developers/faucet) : below is a break down of how to do it.
-
 ![image](images/celo_get_token_from_faucet.gif)
-
-
 5. Install the Celo plugin on your Remix IDE by clicking on the Plugin manager, activate Celo, then you click on the Celo Icon.
-
 6. On the sidebar, click on the connect button. Your Celo wallet should pop up asking for your approval. 
-
 7. After connecting your wallet, click on the deploy button to deploy the contract. Ensure you take note of the deploy address because we will need it later. 
 
-
-Congrats! you have just deployed your first smart contract on the Celo blockchain.
+Congrats!! you have just deployed your first Smart Contract on the Celo blockchain.
 
 ## Developing the frontend:
 
-Going further we will be using a boilerplate from dacade in building the front end to interact with our smart contract that is being deployed on the Celo blockchain by following the steps below: 
+Going further we will be using a boilerplate from dacade in building the front end to interact with our Smart Contract that is being deployed on the Celo blockchain by following the steps below: 
 
 1. Open a command line interface in the folder or directory where you want to build the front end and run the code below:
 
@@ -437,18 +461,17 @@ Going further we will be using a boilerplate from dacade in building the front e
 git clone https://github.com/Longzea/CeloAssist-Boilerplate
 ```
 
-This will create a folder called `CeloAssist-Boilerplate`. The folder contains the neccessary setup files and folders needed to build our front end and connect it with our smart contract. The three main folders you should watch out for is the: 
+This will create a folder called `CeloAssist-Boilerplate`. The folder contains the neccessary setup files and folders needed to build our front end and connect it with our Smart Contract. The three main folders you should watch out for is the: 
 - The `abis` folder which contains:
-  - celoassist.abi.json file
-  - celoassist.sol file
-  - irc.abi.json file
+  1. celoassist.abi.json file
+  2. celoassist.sol file
+  3. irc.abi.json file
 
 The `components` folder which contains the `Header.js` file and the `RequestList.js` file. 
 
 The `image` folder which contains the image we will use for the project.
 
-
-2. Move to the root directory of the cloned repository on the same command line interface by running the code below:
+2. Move to the root directory of the cloned repository on the same Command Line Interface by running the code below:
 
 ```bash
 cd CeloAssist-Boilerplate
@@ -456,12 +479,11 @@ cd CeloAssist-Boilerplate
 
 The code changes the directory in the command line interface to the root directory for us to install the dependencies that comes with the boilerplate.
 
-3. install all the dependencies by running the code below:
+3. Install all the dependencies by running the code below:
 
 ```bash
 npm install
 ```
-
 Installing all dependencies might take a while. After the dependencies have been installed. 
 
 4. Start up the server by running the code:
@@ -469,18 +491,14 @@ Installing all dependencies might take a while. After the dependencies have been
 ```bash
 npm start
 ```
-
 Your project should be running here **http://localhost:3000/** and a browser window should pop up showing "hello world".
+After starting the server we need to open the `CeloAssist-Boilerplate` folder which is the root folder in our IDE, in our case it is the VSCode IDE.
 
-After starting the server we need to open the `CeloAssist-Boilerplate` folder which is the root folder in our IDE, in our case, the VSCode IDE.
+## The HTML Part of the DApp:
 
+Although in React you can embed HTML and JavaScript together, there is a central place in which all HTMLs are connected. Open the public folder in the root directory and click on the index.html file. Inside the HTML file is where you can declare your HTML version, meta tags and so on.
 
-## The HTML Part of the dAPP
-
-Although in React you can embed HTML and Javascript together, there is a central place in which all HTMLs are connected. Open the public folder in the root directory and click on the index.html file. Inside the HTML file is where you can declare your HTML version, meta tags, and so on.
-
-The first line of the HTML code is to declare our HTML version. In this tutorial, we shall be using html5.
-
+The first line of the HTML code is to declare our HTML version. In this tutorial, we shall be using HTML5.
 
 ```html
 <!DOCTYPE html>
@@ -488,11 +506,8 @@ The first line of the HTML code is to declare our HTML version. In this tutorial
 
 </html>
 ```
-
-In the code above, we declare our HTML version which is version 5 and we tell declared the language version we want by using the opening html tag.
-
-Up next, we are going to create our head element embedded inside the html tags. In the head, element is where we are going to declare our meta tags, title, and link our logo that will display on the browser tab.
-
+In the code above, we declare our HTML version which is version 5 and we tell declared the language version we want by using the opening HTML tag.
+Up next, we are going to create our head element embedded inside the HTML tags. In the head, element is where we are going to declare our meta tags, title and link our logo that will display on the browser tab.
 
 ```html
 <head>
@@ -557,9 +572,9 @@ Here is the full code:
   </html>
 ```
 
-# The Javascript part of the DApp
+# The Javascript part of the DApp:
 
-## The index.js file
+## The index.js file:
 
 The index.js file is where we mount or render our main React component into the `root` id which is in our `index.html` file and we can also import the component which we want to use globally into the `index.html` file.
 
@@ -568,7 +583,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
-
 
 ReactDOM.render(
   <React.StrictMode>
@@ -582,13 +596,11 @@ In the code above, we imported some libraries such as React and ReactDom which a
 
 Furthermore, we wrap the `App.js` component with the `ReactDOM.render` and target the root id in our `index.html` file.
 
-
-## The App.js file
+## The App.js file:
 
 The App.js file can be located in the root folder which contains components to be rendered on the web page. It is the root source in which other components are also rendered. 
 
-Next, we are going to import some of the libraries we need.
-
+Next, we are going to import some of the libraries we need:
 
 ```js
 import React, { useState, useEffect } from 'react';
@@ -598,27 +610,24 @@ import BigNumber from "bignumber.js";
 ```
 
 We are going to start by importing standard react hooks like `useState` and `useEffect` from the react library.
-
-Then we import the web3, contractkit, and bignumber js objects from their libraries.
-
+Then we import the web3, contractkit and bignumber,js objects from their libraries.
 Celo's operations often deal with numbers that are too large for Javascript to handle. To handle these numbers, we will use bignumber.js.
 
-Next, we are going to import our abi's which are the `celoassist` and `erc20` abi from the `abis` folder.
-
+Next, we are going to import our abi's which are the `celoassist` and `erc20` abi from the `abis` folder:
 
 ```js
 import celoassist from './abis/celoassist.abi.json';
 import erc20 from './abis/irc.abi.json';
 ```
 
-Next, we are going to import our components which we are going to discuss later from the components folder.
+Next, we are going to import our components which we are going to discuss later from the components folder:
 
 ```js
 import Header from './components/Header';
 import RequestLists from './components/RequestLists';
 ```
 
-Next, we are going to create three constants. 
+Next, we are going to create three constants:
 
 ```js
 const ERC20_DECIMALS = 18;
@@ -631,13 +640,10 @@ const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 ```
 
 The first constant `ERC20_DECIMALS` is set to 18 because, by default, the ERC20 interface uses 18 decimal places.
-
 The second constant `contractAddress` stores the address to which the smart contract is deployed to.
-
 The third constant `cUSDContractAddress` stores the cUSD contract address.
 
 Up next, we would be using `useState` to keep track of some variables in the dapp.
-
 
 ```js
 function App() {
@@ -655,14 +661,13 @@ function App() {
 
 ```
 
-useState is a Hook in React that allows you to add state to functional components. It is a way to manage and update the state of a component. 
+`useState` is a Hook in React that allows you to add state to functional components. It is a way to manage and update the state of a component. 
 
-useState returns an array with two elements: the current state, and a function to update it. The first argument passed to useState is the initial state, and the second argument is an optional callback function to run after the state is updated. ([Learn more about useState](https://reactjs.org/docs/hooks-state.html))
-
-The next task is to create an asynchronous function called connectCeloWallet that allows a user to connect to the Celo Blockchain and read the balance of their account. The function will perform several checks and actions to ensure that the user has the necessary tools and permissions to interact with the Celo Blockchain.
-
+`useState` returns an array with two elements: the current state, and a function to update it. The first argument passed to `useState` is the initial state, and the second argument is an optional `callback` function to run after the state is updated. ([Learn more about useState](https://reactjs.org/docs/hooks-state.html))
 
 The next task is to create an asynchronous function called connectCeloWallet that allows a user to connect to the Celo Blockchain and read the balance of their account. The function will perform several checks and actions to ensure that the user has the necessary tools and permissions to interact with the Celo Blockchain.
+
+The next task is to create an asynchronous function called `connectCeloWallet` that allows a user to connect to the Celo Blockchain and read the balance of their account. The function will perform several checks and actions to ensure that the user has the necessary tools and permissions to interact with the Celo Blockchain.
 
 ```js
   const connectCeloWallet = async () => {
@@ -690,20 +695,19 @@ The next task is to create an asynchronous function called connectCeloWallet tha
   };
 ```
 
+The first step is to check if the user has the Celo Extension Wallet installed by checking if the "window.celo" object exists. If it does not exist, the function will use the console to inform the user that they need to install the wallet.
 
-The first step is to check if the user has the CeloExtensionWallet installed by checking if the "window.celo" object exists. If it does not exist, the function will use the console to inform the user that they need to install the wallet.
-
-If the "window.celo" object does exist, a notification will be sent to the user in the console to approve this DApp and try the window.celo.enable() function. This will open a pop-up dialogue in the UI that asks for the user's permission to connect the DApp to the CeloExtensionWallet.
+If the "window.celo" object does exist, a notification will be sent to the user in the console to approve this DApp and try the window.celo.enable() function. This will open a pop-up dialogue in the UI that asks for the user's permission to connect the DApp to the Celo Extension Wallet.
 
 If an error is caught during this process, the user would be informed that they must approve the dialogue to use the DApp.
 
-After the user approves the DApp, create a web3 object using the window.celo object as the provider. This web3 object can then be used to create a new kit instance, which will be saved to the kit state. This kit instance will have the functionality to interact with the Celo Blockchain.
+After the user approves the DApp, create a Web3 object using the window.celo object as the provider. This Web3 object can then be used to create a new kit instance, which will be saved to the kit state. This kit instance will have the functionality to interact with the Celo Blockchain.
 
 You would then access the user's account by utilizing the web3 object and kit instance that have been created. 
 
-After creating the new kit instance, use the method kit.web3.eth.getAccounts() to get an array of the connected user's addresses. Use the first address from this array and set it as the default user address by using kit.defaultAccount. This will allow the address to be used globally in the DApp.
+After creating the new kit instance, use the method `kit.web3.eth.getAccounts()` to get an array of the connected user's addresses. Use the first address from this array and set it as the default user address by using `kit.defaultAccount`. This will allow the address to be used globally in the DApp.
 
-Now, create an asynchronous function called `getBalance` that retrieves the user's balance and updates the corresponding state variables
+Now, create an asynchronous function called `getBalance` that retrieves the user's balance and updates the corresponding state variables:
 
 ```js
   const getBalance = async () => {
@@ -726,7 +730,6 @@ The next step is to extract the CELO and cUSD balance from the "balance" object 
 Next, create a contract instance by calling the "new kit.web3.eth.Contract(cardealer, contractAddress)" , with your abi and contract address (created earlier) as arguments.
 
 Update the state by calling `setcontract(contract); setCeloBalance(celoBalance); setcUSDBalance(USDBalance);`. 
-
 
 Up next, we are going to create a function called `getRequests` which will retrieves all requests from the smart contract and updates the corresponding state variables.
 
@@ -759,10 +762,9 @@ Up next, we are going to create a function called `getRequests` which will retri
 
 In the function, we start of by calling the `getPayeeLength` function  which will get the total number of payee requests from the smart contract and store it in the `requestLength` variable.
 
-
 Next, we are going to create an empty array called `_request` which will be used to store the requests objects, then we use a a for loop to iterate through the requests stored in the smart contract, starting from index 0 up to the `requestLength` value.
 
-For each iteration, the function creates a new promise called `_request`, which retrieves the request information for the current index by calling the `contract.methods.fetchPayeeById(index).call()` method. This method returns an array of values, such as owner, payeeFullName, payeeDescription, networkType, payeeGasFee.
+For each iteration, the function creates a new promise called `_request`, which retrieves the request information for the current index by calling the `contract.methods.fetchPayeeById(index).call()` method. This method returns an array of values such as `owner`, `payeeFullName`, `payeeDescription`, `networkType`, `payeeGasFee`.
 These values are then stored in an object that is passed to the resolve function of the promise, along with the index.
 
 The `_request` promise is then pushed to the `_requests` array. After the loop is finished, wait for all promises in the `_requests` array to be resolved by calling `await Promise.all(_requests)` and then store the requests in the `allRequest` variable, this will make sure that all the requests have been retrieved before moving on. 
@@ -770,8 +772,6 @@ The `_request` promise is then pushed to the `_requests` array. After the loop i
 Next, we update the state with the `allRequest` array, by calling `setRequest(allRequests)`.
 
 Up next, we are going to create a function called a function called `createRequest`, which will help the user submit a form which we are going to create later to the smart contract.
-
-
 
 ```js
   // An async function that add payee request to the smart contract
@@ -798,20 +798,17 @@ The function receives parameters `_payeeFullName`, `_payeeDescription`, `_payeeG
 
 Next, we are going to create a new `BigNumber` instance with the `_payeeGasFee` argument, and then shift it by the value stored in the `ERC20_DECIMALS` variable to convert it to `wei` and then store it in the variable `payeeGasFee`.
 
-Next,  we are going to use the `createPayee` function in our smart contract to create the request using the `address` of the user. 
+Next,  we are going to use the `createPayee` function in our Smart Contract to create the request using the `address` of the user. 
 
-If it is successful, we set our loading to be false, alert the user, and then call the `getRequests()` function to fetch all requests including the one the user just created.
+If it is successful, we set our loading to be false, alert the user and then call the `getRequests()` function to fetch all requests including the one the user just created.
 
 If it is not successful, we also set our loading to false and then alert the user also.
 
-
-Up next, we are going to return some components which we will look at next. The component will enable the user to create a request, view request details, and so on.
+Up next, we are going to return some components which we will look at next. The component will enable the user to create a request, view request details and so on.
 
 It will also receive props.
 
-
 ```js
-
   return (
 
     <div className="content">
@@ -842,7 +839,6 @@ import erc20 from './abis/irc.abi.json';
 import Header from './components/Header';
 import RequestLists from './components/RequestLists';
 
-
 const ERC20_DECIMALS = 18;
 
 // Deployed smart contract address.
@@ -850,7 +846,6 @@ const contractAddress = "0x3AcEEA272E68a5B95a087D708Bd7CaBfa9Ebe50b";
 
 // cUSD contract address contract address.
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
-
 
 function App() {
 
@@ -864,7 +859,6 @@ function App() {
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false)
   const toggle = () => setModal(!modal);
-
 
 // An async function that connects your wallet to the dApp.
   const connectCeloWallet = async () => {
@@ -896,7 +890,6 @@ function App() {
     connectCeloWallet();
   }, []);
 
-
 // useEffect that calls  the get balance function each time the page loads.  
   useEffect(() => {
     if (kit && address) {
@@ -911,7 +904,6 @@ function App() {
       getRequests()
     };
   }, [contract]);
-
 
 // An async function that gets the balance in your celo wallet.
   const getBalance = async () => {
@@ -971,7 +963,6 @@ function App() {
 
   }
 
-
   return (
 
     <div className="content">
@@ -991,7 +982,7 @@ export default App;
 
 ```
 
-## The Header.js component
+## The Header.js component:
 
 The `Header.js` component is where we are going to display our celo balance and also create a form inside a modal so that the user can create a request with that form. 
 
@@ -1022,7 +1013,6 @@ In the code above, we are receiving some props and declaring some useState varia
 
 The next code is a button that will be used to close our form modal.
 
-
 ```js
 // Button that closes a modal.
   const closeBtn = (
@@ -1035,7 +1025,6 @@ The next code is a button that will be used to close our form modal.
 The button calls the toggle function which toggles the value of the state variable `modal` from `true` to `false`.
 
 Up next, is the body of our Header component. We start by creating a header that will display our project title and the amount of cUSD a user has.
-
 
 ```js
   return (
@@ -1065,7 +1054,6 @@ Next, we are going to a container that will display what our project is all abou
               anything that might require a small of Celo or cUSD be it testnet or mainnet. </p>
             <Button color="success" onClick={toggle} disabled={loading}>Create a Request</Button>
           </div>
-
 
           <div className='col-md-6'>
             <img src={banner} alt='banner' className='br-2 rounded shadow' width="100%" />
@@ -1142,8 +1130,7 @@ In the modal footer is a button that submits the form to the smart contract. It 
 
 Next, we export the function so that we can be able to use or call it in other components.
 
-
-## The RequestList.js file
+## The RequestList.js file:
 
 The `RequestList.js` component is the place where a user can see all request that has been made, view a request delete, chat and transfer fund to a user.
 
@@ -1171,7 +1158,6 @@ Next, we are going to import some components from `Reactstrap` to help us build 
 
 Next, we are going to create the component's function and declare some state variables using `useState`. The function is also receiving some props which we will use later.
  
-
 ```js
 const Index = ({ requests, contract, kit, address, loading, getBalance, getRequests }) => {
 
@@ -1186,7 +1172,6 @@ const Index = ({ requests, contract, kit, address, loading, getBalance, getReque
   const [disableChatButton, setDisableChaButton] = useState(false)
   const [disableDeletetBtn, setDisableDeletetBtn] = useState(false)
 
-
   // Button that closes a modal.
   const closeBtn = (
     <button className="close" onClick={toggle} type="button">
@@ -1197,7 +1182,7 @@ const Index = ({ requests, contract, kit, address, loading, getBalance, getReque
 ```
 The `closeBtn` constant returns a button which helps in toggling our modal which we will create later.
 
-Up next, we will be creating some functions  
+Up next, we will be creating some functions:
 
 ```js
 
@@ -1210,7 +1195,7 @@ Up next, we will be creating some functions
 ```
 The function above toggles a modal that will show the full details of a request. We set the state `viewChats` to false and also the `modal` to true.
 
-Up next, we are going to create an asynchronous function called `getRequestById`. This will get the request that is associated with its id from the smart contract.
+Up next, we are going to create an asynchronous function called `getRequestById`. This will get the request that is associated with its id from the Smart Contract.
 
 
 ```js
@@ -1238,9 +1223,7 @@ The function receives a parameter `id`. Next, we create a new promise called `_r
 
 Then we are going to use the `.then` method to resolve the promise, store the result in the `requestDetails` state, and set our modal to true.
 
-
 Up next, we are going to create a function called `fundPayee`. With this function, you can transfer a token to another user that made a request.
-
 
 ```js
   // An async function that transfer fund to a payee. 
@@ -1277,7 +1260,6 @@ Next, we call the `fundPayee` function in our smart contract using the `contract
 
 Next, we use the `catch` block to handle any error.  
 
-
 Up next, we are going to create a function called `chat`, this you to send a message to a user that requested by using the `request id`.
 
 ```js
@@ -1303,10 +1285,9 @@ Up next, we are going to create a function called `chat`, this you to send a mes
   }
 ```
 
-We start the function by setting the  `disableChatButton` to true, then we use the `try` block to call the  `storeChatMessages` function in our smart contract. We pass the `id` and `message` as a parameter and we use the `send` method to send the transaction to the blockchain the `send` method requires the address of the user.
+We start the function by setting the  `disableChatButton` to true, then we use the `try` block to call the  `storeChatMessages` function in our Smart Contract. We pass the `id` and `message` as a parameter and we use the `send` method to send the transaction to the blockchain the `send` method requires the address of the user.
 
-Up next, we are going to create a function called `getChatsById`. The function will fetch all chats associated with a payee with the corresponding id.
-
+Up next, we are going to create a function called `getChatsById`. The function will fetch all chats associated with a payee with the corresponding id:
 
 ```js
 // An async function that fetchs chat of a user by it's id
@@ -1324,7 +1305,7 @@ Up next, we are going to create a function called `getChatsById`. The function w
     }
   }
 ```
-The function takes the `id` as parameter and we use the try block to call the `getChatsById`  function  in our smart contract,  store the result in a variable called  `data`, and set some state variable, then we use the catch to handle any error and then display an error message to the user.
+The function takes the `id` as parameter and we use the try block to call the `getChatsById`  function  in our Smart Contract, store the result in a variable called  `data`, and set some state variable, then we use the catch to handle any error and then display an error message to the user.
 
 Next we are going to create a function called `deleteRequest` that allow user to delete his / her request.
 
@@ -1387,7 +1368,6 @@ Next, let's create the return function of our Header component. The return funct
                         />
                       </div>
 
-
                       <div className='mx-3'>
                         <h6>{request.payeeFullName}</h6>
                         <p style={{ margin: 0, padding: 0, fontSize: '12px' }}>
@@ -1407,7 +1387,6 @@ Next, let's create the return function of our Header component. The return funct
 ```
 
 Inside the function, if `loading` is true it will display some text else it will use the props `request` which is an array that stores payee request and map each item in the array to `divs` in order to display what is inside the array.
-
 
 Next we create a modal that will display the full details of a request.
 
@@ -1429,7 +1408,6 @@ Next we create a modal that will display the full details of a request.
                     className="identicon rounded-circle"
                   />
                 </div>
-
 
                 <div className='mx-3'>
                   <h6 className="title">{requestDetails.payeeFullName}</h6>
@@ -1538,7 +1516,6 @@ Next we create a modal that will display the full details of a request.
 
                     />
 
-
                     <p style={{ fontSize: '12px', fontWeight: "bold" }} className='m-0 p-0 mx-2'>{itm[1]}</p>
                   </div>
                 )
@@ -1557,24 +1534,24 @@ export default Index;
 ```
 
 The modal contains `divs` which displays a payee details according to the id of that details, buttons for deleting a request, transfering cUSD token and opening the chat section.
-
-
 The modal also contains a chat section where you can send a message to the user and also the user can send message to you.
-
 Next we export the function so that it can be used with other components.
 
+Congratulations 🎉, you were able to build your fullstack DApp using Solidity and React on the Celo Smart Contract. Great JOB!!
 
-## Conclusion
+## Conclusion:
 
-Congratulations 🎉, you were able to build your fullstack dapp using solidity and react on the celo smart contract. Great JOB!!
+Building a Celo Assistance DApp involves creating a decentralized application on the Celo blockchain platform to facilitate financial assistance for individuals in need. The DApp aims to leverage Celo's mobile-first approach and inclusive financial system to provide accessible and affordable aid to the unbanked and underbanked populations.
 
-## Next steps
+By leveraging Celo's technology and principles of financial inclusion, a Celo Assistance DApp can empower individuals in need, providing them with a secure and accessible platform to access financial assistance efficiently while maintaining transparency and accountability throughout the process.
+
+## Next steps:
 
 You can add more functions to the app. The source code of this project is hosted [here](https://github.com/Longzea/Celo-Assist). You can use it as a source of reference to edit yours.
 
 - [Live Demo](https://longzea.github.io/Celo-Assist/)
 
-## About the Author
+## About the Author:
 
 Longzea Peter is a web3 developer and would love to connect with you on Twitter. Here is my Twitter handle [@Longzea1](https://twitter.com/Longzea1)
 "# CeloAssist-Tutorial" 
